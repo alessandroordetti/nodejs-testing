@@ -16,8 +16,8 @@ const replaceTemplate = (temp, product) => {
 }
 
 //Templates
-const templateOverview = fs.readFileSync(`${__dirname}/templates/template-overview.html`, 'utf8');
-const templateCard = fs.readFileSync(`${__dirname}/templates/template-card.html`, 'utf8');
+const tempOverview = fs.readFileSync(`${__dirname}/templates/template-overview.html`, 'utf8');
+const tempCard = fs.readFileSync(`${__dirname}/templates/template-card.html`, 'utf8');
 const templateProduct = fs.readFileSync(`${__dirname}/templates/template-product.html`, 'utf8');
 
 //API
@@ -36,14 +36,14 @@ const server = http.createServer((req, res) => {
                 "Content-type": "text/html",
             })
 
-            const cardsHtml = dataObject.map((e) => {
-                replaceTemplate(templateCard, e)
+            const cardsHtml = dataObject.map(el => {
+                replaceTemplate(tempCard, el)
             })
 
             console.log(cardsHtml);
             
 
-            res.end(templateOverview);
+            res.end(tempOverview);
             break;
         case '/api':
             res.writeHead(200, { "Content-type": "application/json" })
