@@ -29,10 +29,15 @@ const dataObject = JSON.parse(data);
 
 
 const server = http.createServer((req, res) => {
-    const pathName = req.url;
+    const request = req.url;
 
-    switch (pathName) {
-        case '/' || '/home':
+    const parsed = url.parse(request, true)
+
+    const {query, pathname} = parsed;
+    console.log(query);
+
+    switch (pathname) {
+        case ('/' || '/home'):
             res.writeHead(200, {
                 "Content-type": "text/html",
             })
@@ -47,7 +52,16 @@ const server = http.createServer((req, res) => {
             break;
 
         case '/product': 
-            res.end('This is the product');
+            res.writeHead(200, {
+                "Content-type": "text/html",
+            })
+            const product = dataObject[query.id]
+
+            console.log(product);
+
+            const productOutput = replaceTemplate(tempProduct, product)
+
+            res.end(productOutput);
             break;
         case '/api':
             res.writeHead(200, { "Content-type": "application/json" })
