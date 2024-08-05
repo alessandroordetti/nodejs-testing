@@ -1,9 +1,8 @@
 const fs = require('node:fs')
 const http = require('node:http')
 const url = require('node:url')
-const replaceTemplate = require('./modules/replaceTemplate.js')
-
-
+const slugify = require('slugify');
+const replaceTemplate = require('./modules/replaceTemplate.js');
 
 //Templates
 const tempOverview = fs.readFileSync(`${__dirname}/templates/template-overview.html`, 'utf8');
@@ -14,11 +13,12 @@ const tempProduct = fs.readFileSync(`${__dirname}/templates/template-product.htm
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf8');
 const dataObject = JSON.parse(data);
 
-const server = http.createServer((req, res) => {
-    const request = req.url;
+const slugs = dataObject.map(el => slugify(el.productName, { lower: true }))
+console.log(slugs);
 
-    console.log('Changed');
-    
+
+const server = http.createServer((req, res) => {
+    const request = req.url;    
 
     const parsed = url.parse(request, true)
 
@@ -44,8 +44,6 @@ const server = http.createServer((req, res) => {
                 "Content-type": "text/html",
             })
             const product = dataObject[query.id]
-
-            console.log(product);
 
             const productOutput = replaceTemplate(tempProduct, product)
 
